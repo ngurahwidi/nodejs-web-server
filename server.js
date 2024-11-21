@@ -1,22 +1,29 @@
 const http = require('http');
 
 const requestListener = (req, res) => {
-    res.setHeader('content-type', 'text/html');
+    res.setHeader('content-type', 'application/json');
+    res.setHeader('Powered-By', 'Node.js')
 
     const { method, url } = req;
 
     if (url === '/') {
         if (method === 'GET') {
             res.statusCode = 200;
-            res.end('<h1>Ini adalah homepage</h1>');
+            res.end(JSON.stringify({
+                message: 'Ini adalah homepage'
+            }));
         } else {
             res.statusCode = 400;
-            res.end(`<h1>Halaman tidak dapat diakses dengan ${method} request!</h1>`);
+            res.end(JSON.stringify({
+                message: `Halaman ini tidak dapat diakses dengan ${method} request`
+            }));
         }
     } else if (url === '/about') {
         if (method === 'GET') {
             res.statusCode = 200;
-            res.end('<h1>Halo, ini adalah halaman about</h1>');
+            res.end(JSON.stringify({
+                message: 'Ini adalah about page'
+            }));
         } else if (method === 'POST') {
             let body = [];
 
@@ -28,16 +35,22 @@ const requestListener = (req, res) => {
                 body = Buffer.concat(body).toString();
                 const { name } = JSON.parse(body);
                 res.statusCode = 200;
-                res.end(`<h1>Halo, ${name}, ini adalah halaman about!</h1>`);
+                res.end(JSON.stringify({
+                    message: `Halo, ${name}, ini adalah halaman about!`
+                }));
             })
         } else {
             res.statusCode = 400;
-            res.end(`<h1>Halaman tidak dapat diakses dengan ${method} request!</h1>`);
+            res.end(JSON.stringify({
+                message: `Halaman tidak dapat diakses dengan ${method} request!`
+            }));
         }
 
     } else {
         res.statusCode = 404;
-        res.end('<h1>Halaman tidak ditemukan</h1>')
+        res.end(JSON.stringify({
+            message: 'Halaman tidak ditemukan',
+        }))
     }
 };
 
